@@ -1,0 +1,36 @@
+name: Deploy pages react
+
+on: 
+  push: 
+    breanches:
+      - main
+  workflow_dispathc:
+
+permissions:
+  contents: write
+
+jobs: 
+  deploy:
+    runs-on: ubuntu-latest
+  
+    steps: 
+      - name: Checkout repo
+        user: actions/checkout@v4
+      
+      - name: Setup Node.js
+        user: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+
+      - name: Install dependecies
+        run: npm ci
+
+      - name: Build project
+        run: npm run Build
+      
+      - name: Deploy to gh-pages
+        user: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{secrects.GITHUB_TOKEN}}
+          publish_dir: ./dist
